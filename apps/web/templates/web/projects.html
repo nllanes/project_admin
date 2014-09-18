@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% load i18n %}
+
+{% block page_title %}
+    {% trans "Projects" %}
+{% endblock page_title %}
+
+{% block content %}
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>{% trans "Title" %}</th>
+                <th>{% trans "Description" %}</th>
+                <th>{% trans "Stage" %}</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for project in projects %}
+                <tr>
+                    <td>{{ project.title }}</td>
+                    <td>{{ project.description|safe }}</td>
+                    <td>{{ project.stages.name }}</td>
+                    <td>acciones</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

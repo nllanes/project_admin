@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% load bootstrap3 %}
+
+{% block content %}
+    <form class="form-horizontal" action="{% url 'create_project' %}" method="post" role="form"> 
+    	{% csrf_token %}
+        {% bootstrap_form form %}
+        <input type="submit" value="Submit" />
+        <input type="hidden" name="next" value="/projects/"/>
+    </form>
+{% endblock %}

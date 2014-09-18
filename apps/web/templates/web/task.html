@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div class="user-form-fields">
+        <h2>Task</h2>
+        <ul>
+            {% for task in tasks %}
+
+                 <div class="input-group">
+                    <br> Name <br/>
+                    <li>{{ task.name }}</li>
+                    <ul>
+                     <br> Description <br/>
+                        <li> {{task.description | safe}}  </li>
+                     <br> Status <br/>
+                        <li>{{ task.status}}</li>
+                     <br> Priority <br/>
+                        <li>{{task.priority}}</li>
+                     <br> Project <br/>
+                        <li>{{ task.project.title }} </li>
+                     <br> Assigned to Developer <br/>
+                        <li>{{ task.assigned_to_developer.user.username }} </li>
+                    <br> Start Date <br/>
+                        <li>{{ task.start_date }} </li>
+                    <br> End Date <br/>
+                        <li>{{ task.end_date }} </li>
+                    </ul>
+                 </div>
+            {% endfor %}
+        </ul>
+    </div>
+{% endblock %}

@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+
+{% block content %}
+        <form action="{% url 'create_stage' %}" method="post"> {% csrf_token %}
+                    <div class="user-form-fields">
+                          {{ form }}
+                           <input type="submit" value="Submit" />
+                           <input type="hidden" name="next" value="/projects/"/>
+                    </div>
+        </form>
+{% endblock %}

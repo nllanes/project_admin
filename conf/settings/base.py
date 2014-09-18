@@ -190,11 +190,14 @@ DJANGO_APPS = (
     # Admin panel and documentation:
     'django.contrib.admin',
     # 'django.contrib.admindocs',
+
 )
 
 THIRD_PARTY_APPS = (
     # Database migration helpers:
+    'tinymce',
     'south',
+    'bootstrap3',
 )
 
 # Apps specific for this project go here.
@@ -237,6 +240,9 @@ LOGGING = {
         },
     }
 }
+#####################################
+LOGIN_URL = '/login/'
+LOGIN_REDIRECT_URL = '/'
 ########## END LOGGING CONFIGURATION
 
 
