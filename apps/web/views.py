@@ -1,5 +1,5 @@
 from django.http import HttpResponseRedirect
-from django.views.generic import ListView, DetailView, CreateView
+from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 
 from django.shortcuts import render_to_response, get_object_or_404
 from django.template import RequestContext
@@ -40,12 +40,24 @@ class ProjectList(ListView):
     context_object_name = 'projects'
     queryset = Project.objects.all()
 
+    def get_context_data(self, **kwargs):
+        context = super(ProjectList, self).get_context_data(**kwargs)
+        form = CreateProjectForm()
+        context['form'] = form
+        return context
+
 
 class TaskList(ListView):
     model = Task
     template_name = "web/task.html"
     context_object_name = 'tasks'
     queryset = Task.objects.all()
+
+    def get_context_data(self, **kwargs):
+        context = super(TaskList, self).get_context_data(**kwargs)
+        form = CreateTaskForm()
+        context['form'] = form
+        return context
 
 
 class ProjectDetail(DetailView):
@@ -66,35 +78,30 @@ class DeveloperList(ListView):
 
 
 class CreateProject(CreateView):
-    template_name = 'web/create_project.html'
+    template_name = '/'
     form_class = CreateProjectForm
     context_object_name = 'create_project'
-    success_url = 'web/projects.html'
+    success_url = '/'
 
-    @method_decorator(login_required)
-    def dispatch(self, *args, **kwargs):
-        return super(CreateProject, self).dispatch(*args, **kwargs)
 
-   # def form_valid(self, form):
-   #     current_user = self.request.user
-
-        #Loading the information of the client related to the current logged user
-   #     try:
-   #         client_user = Developer.objects.get(user__username=current_user.username)
-   #     except Developer.DoesNotExist:
-   #         client_user = None
+class UpdateProject(UpdateView):
+    form_class = CreateProjectForm
+    model = Project
+    context_object_name = 'update_project'
+    success_url = '/'
 
 
 class CreateStage(CreateView):
     template_name = 'web/create_stage.html'
-    form_class =  CreateStageForm
+    form_class = CreateStageForm
     context_object_name = 'create_stage'
 
 
 class CreateTask(CreateView):
-    template_name = 'web/create_task.html'
+    template_name = '/task.html'
     form_class = CreateTaskForm
     context_object_name = 'create_task'
+    success_url = '/task'
 
 
 class Registration(CreateView):

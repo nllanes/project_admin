@@ -27,6 +27,7 @@ urlpatterns = patterns(
     url(r'^new_developer/$', DeveloperList.as_view()),
     #url(r'^registration/', Registration.as_view(), name='registration'),
     url(r'^create_project/', CreateProject.as_view(), name='create_project'),
+    url(r'^update_project/', UpdateProject.as_view(), name='update_project'),
     url(r'^create_stage/', CreateStage.as_view(), name='create_stage'),
     url(r'^create_task/', CreateTask.as_view(), name='create_task'),
     url(r'^login/', login, {'template_name': 'web/login.html'}, name='login'),

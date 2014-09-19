@@ -1,11 +1,10 @@
 {% extends "base.html" %}
 
 {% block content %}
-        <form action="{% url 'create_stage' %}" method="post"> {% csrf_token %}
-                    <div class="user-form-fields">
-                          {{ form }}
-                           <input type="submit" value="Submit" />
-                           <input type="hidden" name="next" value="/projects/"/>
-                    </div>
+        <form class="form-horizontal" action="{% url 'create_stage' %}" method="post" role="form"> {% csrf_token %}
+                {% csrf_token %}
+                {% bootstrap_form form %}
+                <input type="submit" value="Submit" />
+                <input type="hidden" name="next" value="/"/>
         </form>
 {% endblock %}

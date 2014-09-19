@@ -1,32 +1,116 @@
 {% extends "base.html" %}
 
-{% block content %}
-    <div class="user-form-fields">
-        <h2>Task</h2>
-        <ul>
-            {% for task in tasks %}
+{% load i18n %}
+{% load bootstrap3 %}
 
-                 <div class="input-group">
-                    <br> Name <br/>
-                    <li>{{ task.name }}</li>
-                    <ul>
-                     <br> Description <br/>
-                        <li> {{task.description | safe}}  </li>
-                     <br> Status <br/>
-                        <li>{{ task.status}}</li>
-                     <br> Priority <br/>
-                        <li>{{task.priority}}</li>
-                     <br> Project <br/>
-                        <li>{{ task.project.title }} </li>
-                     <br> Assigned to Developer <br/>
-                        <li>{{ task.assigned_to_developer.user.username }} </li>
-                    <br> Start Date <br/>
-                        <li>{{ task.start_date }} </li>
-                    <br> End Date <br/>
-                        <li>{{ task.end_date }} </li>
-                    </ul>
-                 </div>
+{% block page_title %}
+    {% trans "Taks" %}
+{% endblock page_title %}
+
+{% block content %}
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>{% trans "Name" %}</th>
+                <th>{% trans "Description" %}</th>
+                <th>{% trans "Status" %}</th>
+                <th>{% trans "Priority" %}</th>
+                <th>{% trans "Title Project" %}</th>
+                <th>{% trans "Developers" %}</th>
+                <th>{% trans "Star Date" %}</th>
+                <th>{% trans "End Date" %}</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for task in tasks %}
+                <tr>
+                    <td>{{ task.name  }}</td>
+                    <td>{{ task.description | safe }}</td>
+                    <td>{{ task.status }}</td>
+                    <td>{{ task.priority }}</td>
+                    <td>{{ task.project.title }}</td>
+                    <td>{{ task.assigned_to_developer.user.username }}</td>
+                    <td>{{ task.start_date }}</td>
+                    <td>{{ task.end_date }}</td>
+                    <td>
+                        <div class="btn-group">
+                            <a href="#" class="btn btn-default" data-toggle="modal" data-target="#modalUpdateTask">
+                                <span class="glyphicon glyphicon-pencil"></span>
+                            </a>
+                            <a href="#" class="btn btn-default" data-toggle="modal" data-target="#modalDeleteTask">
+                                <span class="glyphicon glyphicon-trash"></span>
+                            </a>
+                        </div>
+
+                    </td>
+                </tr>
             {% endfor %}
-        </ul>
-    </div>
+
+        </tbody>
+    </table>
+      <a href="#" class="btn btn-default" data-toggle="modal" data-target="#modalCreateTask">
+                                <span class="glyphicon glyphicon-plus"></span>
+                            </a>{% csrf_token %}
+    {% block modal_create_task %}
+        <div class="modal fade" id="modalCreateTask" tabindex="-1" role="dialog" aria-labelledby="modalCreateTask" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                    <h4 class="modal-title" id="myModalLabel1">Create Task</h4>
+                    </div>
+                    <div class="modal-body">
+
+                         <form class="form-horizontal" action="{% url 'create_task' %}" method="post" role="form">
+                            {% csrf_token %}
+                            {% bootstrap_form form %}
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                <input type="submit" value="Submit" class="btn btn-default" />
+                            </div>
+                         </form>
+                    </div>
+
+                </div>
+            </div>
+         </div>
+     {% endblock modal_create_task%}
+    {% block modal_update_task %}
+        <div class="modal fade" id="modalUpdateTask" tabindex="-1" role="dialog" aria-labelledby="modalUpdateTask" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                    <h4 class="modal-title" id="myModalLabel2">Update Task</h4>
+                    </div>
+                    <div class="modal-body">
+                     Update
+                       <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+
+                       </div>
+                    </div>
+
+                </div>
+            </div>
+         </div>
+    {% endblock modal_update_task%}
+    {% block modal_delete_task %}
+        <div class="modal fade" id="modalDeleteTask" tabindex="-1" role="dialog" aria-labelledby="modalDeleteTask" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                    <h4 class="modal-title" id="myModalLabel3">Delete Task</h4>
+                    </div>
+                    <div class="modal-body">
+                     Delete
+                       <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+
+                       </div>
+                    </div>
+
+                </div>
+            </div>
+         </div>
+    {% endblock modal_delete_task%}
 {% endblock %}

@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 
 {% load i18n %}
+{% load bootstrap3 %}
 
 {% block page_title %}
     {% trans "Projects" %}
@@ -22,9 +23,97 @@
                     <td>{{ project.title }}</td>
                     <td>{{ project.description|safe }}</td>
                     <td>{{ project.stages.name }}</td>
-                    <td>acciones</td>
+                    <td>
+                        <div class="btn-group">
+                             <a href="#" class="btn btn-default" data-toggle="modal" data-target="#modalUpdateProject">
+                                <span class="glyphicon glyphicon-pencil"></span>
+                            </a>
+                            <a href="#" class="btn btn-default" data-toggle="modal" data-target="#modalDeleteProject">
+                                <span class="glyphicon glyphicon-trash"></span>
+                            </a>
+                        </div>
+
+                    </td>
                 </tr>
             {% endfor %}
+            <tr>
+                <td>
+                    <a href="#" class="btn btn-default" data-toggle="modal" data-target="#basicModal">
+                                <span class="glyphicon glyphicon-plus"></span>
+                            </a>
+                </td>
+            </tr>
         </tbody>
     </table>
+    {% block modal_create_project %}
+        <div class="modal fade" id="basicModal" tabindex="-1" role="dialog" aria-labelledby="basicModal" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                    <h4 class="modal-title" id="myModalLabel">Create Project</h4>
+                    </div>
+                    <div class="modal-body">
+
+                         <form class="form-horizontal" action="{% url 'create_project' %}" method="post" role="form">
+                            {% csrf_token %}
+                            {% bootstrap_form form %}
+
+                             <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                <input type="submit" value="Submit" class="btn btn-default" />
+                             </div>
+                         </form>
+
+                    </div>
+
+                </div>
+            </div>
+         </div>
+    {% endblock modal_create_project%}
+    {% block modal_update_project %}
+        <div class="modal fade" id="modalUpdateProject" tabindex="-1" role="dialog" aria-labelledby="modalUpdateProject" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                    <h4 class="modal-title" id="myModalLabel2">Update Project</h4>
+                    </div>
+                    <div class="modal-body">
+                     Update
+                       <div class="modal-footer">
+                                <form class="form-horizontal" action="{% url 'update_project' %}" method="post" role="form">
+                                    {% csrf_token %}
+                                    {% bootstrap_form form %}
+
+                                     <div class="modal-footer">
+                                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                        <input type="submit" value="Submit" class="btn btn-default" />
+                                     </div>
+                                 </form>
+
+                       </div>
+                    </div>
+
+                </div>
+            </div>
+         </div>
+    {% endblock modal_update_project%}
+    {% block modal_delete_project %}
+        <div class="modal fade" id="modalDeleteProject" tabindex="-1" role="dialog" aria-labelledby="modalDeleteProject" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                    <h4 class="modal-title" id="myModalLabel3">Delete Project</h4>
+                    </div>
+                    <div class="modal-body">
+                     Delete
+                       <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+
+                       </div>
+                    </div>
+
+                </div>
+            </div>
+         </div>
+    {% endblock modal_delete_project%}
 {% endblock %}

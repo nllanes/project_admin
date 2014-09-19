@@ -13,13 +13,13 @@ STATUS_CHOICES = (
     ('inicio', _(u'Inicio')),
     ('development', _(u'Development')),
     ('design', _(u'Design')),
-    ('finished', _(u'finished'))
+    ('finished', _(u'Finished'))
 )
 
 PRIORITY_CHOICES = (
     ('normal', _(u'Normal')),
     ('media', _(u'Media')),
-    ('urgent', _(u'urgent'))
+    ('urgent', _(u'Urgent'))
 )
 
 SPECIALTY_CHOICE = (
