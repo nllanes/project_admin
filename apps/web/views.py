@@ -85,7 +85,6 @@ class CreateProject(CreateView):
 
 
 class UpdateProject(UpdateView):
-    form_class = CreateProjectForm
     model = Project
     context_object_name = 'update_project'
     success_url = '/'

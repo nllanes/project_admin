@@ -48,7 +48,7 @@
     {% block modal_create_project %}
         <div class="modal fade" id="basicModal" tabindex="-1" role="dialog" aria-labelledby="basicModal" aria-hidden="true">
             <div class="modal-dialog">
-                <div class="modal-content">
+                <div class="alert alert-info" role="alert">
                     <div class="modal-header">
                     <h4 class="modal-title" id="myModalLabel">Create Project</h4>
                     </div>
@@ -59,8 +59,8 @@
                             {% bootstrap_form form %}
 
                              <div class="modal-footer">
-                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                                <input type="submit" value="Submit" class="btn btn-default" />
+                                <button type="button" class="btn btn-sm btn-cancel" data-dismiss="modal">Close</button>
+                                <input type="submit" value="Submit" class="btn btn-sm btn-success" />
                              </div>
                          </form>
 
@@ -73,7 +73,7 @@
     {% block modal_update_project %}
         <div class="modal fade" id="modalUpdateProject" tabindex="-1" role="dialog" aria-labelledby="modalUpdateProject" aria-hidden="true">
             <div class="modal-dialog">
-                <div class="modal-content">
+                <div class="alert alert-success" role="alert">
                     <div class="modal-header">
                     <h4 class="modal-title" id="myModalLabel2">Update Project</h4>
                     </div>
@@ -85,8 +85,8 @@
                                     {% bootstrap_form form %}
 
                                      <div class="modal-footer">
-                                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                                        <input type="submit" value="Submit" class="btn btn-default" />
+                                        <button type="button" class="btn btn-sm btn-cancel" data-dismiss="modal">Close</button>
+                                        <input type="submit" value="Submit" class="btn btn-sm btn-success" />
                                      </div>
                                  </form>
 
@@ -100,14 +100,14 @@
     {% block modal_delete_project %}
         <div class="modal fade" id="modalDeleteProject" tabindex="-1" role="dialog" aria-labelledby="modalDeleteProject" aria-hidden="true">
             <div class="modal-dialog">
-                <div class="modal-content">
+                <div class="alert alert-danger" role="alert">
                     <div class="modal-header">
                     <h4 class="modal-title" id="myModalLabel3">Delete Project</h4>
                     </div>
                     <div class="modal-body">
                      Delete
                        <div class="modal-footer">
-                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                <button type="button" class="btn btn-sm btn-cancel" data-dismiss="modal">Close</button>
 
                        </div>
                     </div>

@@ -280,6 +280,28 @@ div .logos a{
     background-color: rgb(242, 239, 232);
 }
 
+.modal-content-delete {
+    width: 100%;
+    padding-left: 30px;
+    padding-right: 30px;
+    padding-top: 35px;
+    padding-bottom: 35px;
+    border-radius: 35px;
+    background-color: rgb(242, 60, 13);
+}
+
+
+.modal-content-update {
+    width: 100%;
+    padding-left: 30px;
+    padding-right: 30px;
+    padding-top: 35px;
+    padding-bottom: 35px;
+    border-radius: 35px;
+    background-color: rgb(166, 255, 17);
+}
+
+
 .modal-body {
     padding: 0;
 }
