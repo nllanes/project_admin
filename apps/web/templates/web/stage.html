@@ -4,9 +4,130 @@
 {% load bootstrap3 %}
 
 {% block page_title %}
-    {% trans "Projects" %}
+    {% trans "Stage" %}
 {% endblock page_title %}
 
 {% block content %}
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>{% trans "Name" %}</th>
+                <th>{% trans "Star Date" %}</th>
+                <th>{% trans "End Date" %}</th>
+                <th>{% trans "Project" %}</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for stage in stages %}
+                <tr>
+                    <td>{{ stage.name  }}</td>
+                    <td>{{ stage.init_date }}</td>
+                    <td>{{ stage.end_date }}</td>
+                    <td>{{ stage.project.title }}</td>
+                    <td>
+                        <div class="btn-group">
+                             <a href="javascript:" onclick="update_stage(this)" class="btn btn-default sign-btn" data-toggle="modal" data-target="#modalUpdateStage" data-url="{% url 'update_stage' stage.id %}">
+                                <span class="glyphicon glyphicon-pencil"></span>
+                            </a>
+                            <a href="javascript:" onclick="delete_stage_confirm(this)" class="btn btn-default" data-toggle="modal" data-target="#modalDeleteStage" data-url="{% url 'delete_stage' stage.id %}" data-name="{{stage.name}}">
+                                <span class="glyphicon glyphicon-trash"></span>
+                            </a>
+                        </div>
 
+                    </td>
+                </tr>
+            {% endfor %}
+
+        </tbody>
+    </table>
+      <a href="#" class="btn btn-default" data-toggle="modal" data-target="#modalCreateStage">
+                                <span class="glyphicon glyphicon-plus"></span>
+                            </a>{% csrf_token %}
+    {% block modal_create_stage %}
+        <div class="modal fade" id="modalCreateStage" tabindex="-1" role="dialog" aria-labelledby="modalCreateStage" aria-hidden="true">
+            <div class="modal-dialog">
+                <div div class="alert alert-info" role="alert">
+                    <div class="modal-header">
+                    <h4 class="modal-title" id="myModalLabel1">Create Stage</h4>
+                    </div>
+                    <div class="modal-body">
+
+                         <form class="form-horizontal" action="{% url 'create_stage' %}" method="post" role="form">
+                            {% csrf_token %}
+                            {% bootstrap_form form %}
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-sm btn-cancel" data-dismiss="modal">Close</button>
+                                <input type="submit" value="Submit" class="btn btn-sm btn-success" />
+                            </div>
+                         </form>
+                    </div>
+
+                </div>
+            </div>
+         </div>
+     {% endblock modal_create_stage%}
+    {% block modal_update_stage %}
+         <div class="modal fade" id="modalUpdateStage" tabindex="-1" role="dialog" aria-labelledby="modalUpdateStage" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="alert alert-success" role="alert">
+                    <div class="modal-header">
+                    <h4 class="modal-title" id="myModalLabel2">{% trans "Update Stage" %}</h4>
+                    </div>
+                    <div class="modal-body">
+                       <div class="modal-footer">
+                        <form id="update_stage_form" class="form-horizontal" action="" method="post" role="form">
+                            {% csrf_token %}
+                            {% bootstrap_form form %}
+                             <div class="modal-footer">
+                                <button type="button" class="btn btn-sm btn-cancel" data-dismiss="modal">Close</button>
+                                <input type="submit" value="Submit" class="btn btn-sm btn-success" />
+                             </div>
+                         </form>
+                       </div>
+                    </div>
+
+                </div>
+            </div>
+         </div>
+    {% endblock modal_update_stage%}
+    {% block modal_delete_stage %}
+        <div class="modal fade" id="modalDeleteTask" tabindex="-1" role="dialog" aria-labelledby="modalDeleteStage" aria-hidden="true">
+            <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header alert alert-danger">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                    <h4 class="modal-title" id="myModalLabel3">Delete Stage</h4>
+                </div>
+                <div class="modal-body">
+                    <h4>{% trans "Esta seguro que desea eliminar el stage" %}: <span id="stage_name"></span>?</h4>
+                </div>
+               <div class="modal-footer">                    
+                    <button id="delete_stage_ok" type="button" onclick="delete_stage(this)" class="btn btn-sm btn-danger">Yes</button>
+                    <button type="button" class="btn btn-sm btn-cancel" data-dismiss="modal">Close</button>
+               </div>
+            </div>
+            </div>
+         </div>
+    {% endblock modal_delete_stage%}
 {% endblock %}
+{% block extra_js %}
+    <script>
+        function update_stage(sender) {
+            $.get($(sender).data('url'), {}, function(response){
+                $('#update_stage_form').replaceWith(response);
+            });
+        }
+
+        function delete_stage_confirm(sender){
+            var $self = $(sender);
+            $('#stage_name').text($self.data('name'));
+            $('#delete_stage_ok').data('url', $self.data('url'));
+        }
+
+        function delete_task(sender){
+            $.post($(sender).data('url'), {}, function(response){});
+        }
+        
+    </script>
+{% endblock extra_js %}

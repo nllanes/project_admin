@@ -2,6 +2,7 @@
 
 {% load i18n %}
 {% load bootstrap3 %}
+{% load staticfiles%} }
 
 {% block page_title %}
     {% trans "Projects" %}
@@ -14,7 +15,7 @@
                 <th>{% trans "Title" %}</th>
                 <th>{% trans "Description" %}</th>
                 <th>{% trans "Stage" %}</th>
-                <th></th>
+                <th style="width: 100px"></th>
             </tr>
         </thead>
         <tbody>
@@ -22,31 +23,30 @@
                 <tr>
                     <td>{{ project.title }}</td>
                     <td>{{ project.description|safe }}</td>
-                    <td>{{ project.stages.name }}</td>
+                    <td>
+                        {{ project.project_stage.all.0.name }}
+                    </td>
                     <td>
                         <div class="btn-group">
-                             <a href="#" class="btn btn-default" data-toggle="modal" data-target="#modalUpdateProject">
+                             <a href="javascript:" onclick="update_project(this)" class="btn btn-default sign-btn" data-toggle="modal" data-target="#modalUpdateProject" data-url="{% url 'update_project' project.id %}">
                                 <span class="glyphicon glyphicon-pencil"></span>
                             </a>
-                            <a href="#" class="btn btn-default" data-toggle="modal" data-target="#modalDeleteProject">
+                            <a href="javascript:" onclick="delete_project_confirm(this)" class="btn btn-default" data-toggle="modal" data-target="#modalDeleteProject" data-url="{% url 'delete_project' project.id %}" data-name="{{project.title}}">
                                 <span class="glyphicon glyphicon-trash"></span>
                             </a>
                         </div>
-
                     </td>
                 </tr>
+            {% empty %}
+                There are no projects created
             {% endfor %}
-            <tr>
-                <td>
-                    <a href="#" class="btn btn-default" data-toggle="modal" data-target="#basicModal">
-                                <span class="glyphicon glyphicon-plus"></span>
-                            </a>
-                </td>
-            </tr>
         </tbody>
     </table>
+    <a href="#" class="btn btn-default" data-toggle="modal" data-target="#modalCreateProject">
+                                <span class="glyphicon glyphicon-plus"></span>
+                            </a>{% csrf_token %}
     {% block modal_create_project %}
-        <div class="modal fade" id="basicModal" tabindex="-1" role="dialog" aria-labelledby="basicModal" aria-hidden="true">
+        <div class="modal fade" id="modalCreateProject" tabindex="-1"  role="dialog" aria-labelledby="modalCreateProject" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="alert alert-info" role="alert">
                     <div class="modal-header">
@@ -75,21 +75,18 @@
             <div class="modal-dialog">
                 <div class="alert alert-success" role="alert">
                     <div class="modal-header">
-                    <h4 class="modal-title" id="myModalLabel2">Update Project</h4>
+                    <h4 class="modal-title" id="myModalLabel2">{% trans "Update Project" %}</h4>
                     </div>
                     <div class="modal-body">
-                     Update
                        <div class="modal-footer">
-                                <form class="form-horizontal" action="{% url 'update_project' %}" method="post" role="form">
-                                    {% csrf_token %}
-                                    {% bootstrap_form form %}
-
-                                     <div class="modal-footer">
-                                        <button type="button" class="btn btn-sm btn-cancel" data-dismiss="modal">Close</button>
-                                        <input type="submit" value="Submit" class="btn btn-sm btn-success" />
-                                     </div>
-                                 </form>
-
+                        <form id="update_project_form" class="form-horizontal" action="" method="post" role="form">
+                            {% csrf_token %}
+                            {% bootstrap_form form %}
+                             <div class="modal-footer">
+                                <button type="button" class="btn btn-sm btn-cancel" data-dismiss="modal">Close</button>
+                                <input type="submit" value="Submit" class="btn btn-sm btn-success" />
+                             </div>
+                         </form>
                        </div>
                     </div>
 
@@ -100,20 +97,43 @@
     {% block modal_delete_project %}
         <div class="modal fade" id="modalDeleteProject" tabindex="-1" role="dialog" aria-labelledby="modalDeleteProject" aria-hidden="true">
             <div class="modal-dialog">
-                <div class="alert alert-danger" role="alert">
-                    <div class="modal-header">
+            <div class="modal-content">
+                <div class="modal-header alert alert-danger">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
                     <h4 class="modal-title" id="myModalLabel3">Delete Project</h4>
-                    </div>
-                    <div class="modal-body">
-                     Delete
-                       <div class="modal-footer">
-                                <button type="button" class="btn btn-sm btn-cancel" data-dismiss="modal">Close</button>
-
-                       </div>
-                    </div>
-
                 </div>
+                <div class="modal-body">
+                    <h4>{% trans "Esta seguro que desea eliminar el proyecto" %}: <span id="project_name"></span>?</h4>
+                </div>
+               <div class="modal-footer">                    
+                    <button id="delete_project_ok" type="button" onclick="delete_project(this)" class="btn btn-sm btn-danger">Yes</button>
+                    <button type="button" class="btn btn-sm btn-cancel" data-dismiss="modal">Close</button>
+               </div>
+            </div>
             </div>
          </div>
     {% endblock modal_delete_project%}
 {% endblock %}
+
+{% block extra_js %}
+    <script>
+        function update_project (sender) {
+            $.get($(sender).data('url'), {}, function(response){
+                $('#update_project_form').replaceWith(response);
+            });
+        }
+
+        function delete_project_confirm(sender){
+            var $self = $(sender);
+            $('#project_name').text($self.data('name'));
+            $('#delete_project_ok').data('url', $self.data('url'));
+        }
+
+        function delete_project(sender){
+            $.post($(sender).data('url'), {}, function(response){
+                window.location = '/';
+            });
+        }
+        
+    </script>
+{% endblock extra_js %}

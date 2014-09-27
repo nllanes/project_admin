@@ -4,19 +4,20 @@ from django.contrib.auth.forms import UserCreationForm
 from apps.web.models import Developer, Project, Stage, Task
 
 
-class CreateProjectForm(forms.ModelForm):
+class ManageProjectForm(forms.ModelForm):
     class Meta:
         model = Project
 
 
-class CreateStageForm(forms.ModelForm):
+class ManageStageForm(forms.ModelForm):
     class Meta:
         model = Stage
 
 
-class CreateTaskForm(forms.ModelForm):
+class ManageTaskForm(forms.ModelForm):
     class Meta:
         model = Task
+
 
 
 class UserRegisterForm(UserCreationForm):

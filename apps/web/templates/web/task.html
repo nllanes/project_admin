@@ -35,10 +35,10 @@
                     <td>{{ task.end_date }}</td>
                     <td>
                         <div class="btn-group">
-                            <a href="#" class="btn btn-default" data-toggle="modal" data-target="#modalUpdateTask">
+                             <a href="javascript:" onclick="update_task(this)" class="btn btn-default sign-btn" data-toggle="modal" data-target="#modalUpdateTask" data-url="{% url 'update_task' task.id %}">
                                 <span class="glyphicon glyphicon-pencil"></span>
                             </a>
-                            <a href="#" class="btn btn-default" data-toggle="modal" data-target="#modalDeleteTask">
+                            <a href="javascript:" onclick="delete_task_confirm(this)" class="btn btn-default" data-toggle="modal" data-target="#modalDeleteTask" data-url="{% url 'delete_task' task.id %}" data-name="{{task.name}}">
                                 <span class="glyphicon glyphicon-trash"></span>
                             </a>
                         </div>
@@ -78,39 +78,64 @@
     {% block modal_update_task %}
         <div class="modal fade" id="modalUpdateTask" tabindex="-1" role="dialog" aria-labelledby="modalUpdateTask" aria-hidden="true">
             <div class="modal-dialog">
-                <div div class="alert alert-success" role="alert">
+                <div class="alert alert-success" role="alert">
                     <div class="modal-header">
-                    <h4 class="modal-title" id="myModalLabel2">Update Task</h4>
+                    <h4 class="modal-title" id="myModalLabel2">{% trans "Update Task" %}</h4>
                     </div>
                     <div class="modal-body">
-                     Update
                        <div class="modal-footer">
+                        <form id="update_task_form" class="form-horizontal" action="" method="post" role="form">
+                            {% csrf_token %}
+                            {% bootstrap_form form %}
+                             <div class="modal-footer">
                                 <button type="button" class="btn btn-sm btn-cancel" data-dismiss="modal">Close</button>
-
+                                <input type="submit" value="Submit" class="btn btn-sm btn-success" />
+                             </div>
+                         </form>
                        </div>
                     </div>
 
                 </div>
             </div>
          </div>
-    {% endblock modal_update_task%}
+    {% endblock modal_update_task %}
     {% block modal_delete_task %}
         <div class="modal fade" id="modalDeleteTask" tabindex="-1" role="dialog" aria-labelledby="modalDeleteTask" aria-hidden="true">
             <div class="modal-dialog">
-                <div div class="alert alert-danger" role="alert">
-                    <div class="modal-header">
-                    <h4 class="modal-title" id="myModalLabel3">Delete Task</h4>
-                    </div>
-                    <div class="modal-body">
-                     Delete
-                       <div class="modal-footer">
-                                <button type="button" class="btn btn-sm btn-cancel" data-dismiss="modal">Close</button>
-
-                       </div>
-                    </div>
-
+            <div class="modal-content">
+                <div class="modal-header alert alert-danger">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                    <h4 class="modal-title" id="myModalLabel3">Delete Project</h4>
                 </div>
+                <div class="modal-body">
+                    <h4>{% trans "Esta seguro que desea eliminar el proyecto" %}: <span id="task_name"></span>?</h4>
+                </div>
+               <div class="modal-footer">                    
+                    <button id="delete_task_ok" type="button" onclick="delete_task(this)" class="btn btn-sm btn-danger">Yes</button>
+                    <button type="button" class="btn btn-sm btn-cancel" data-dismiss="modal">Close</button>
+               </div>
+            </div>
             </div>
          </div>
     {% endblock modal_delete_task%}
 {% endblock %}
+{% block extra_js %}
+    <script>
+        function update_task (sender) {
+            $.get($(sender).data('url'), {}, function(response){
+                $('#update_task_form').replaceWith(response);
+            });
+        }
+
+        function delete_task_confirm(sender){
+            var $self = $(sender);
+            $('#task_name').text($self.data('name'));
+            $('#delete_task_ok').data('url', $self.data('url'));
+        }
+
+        function delete_task(sender){
+            $.post($(sender).data('url'), {}, function(response){});
+        }
+        
+    </script>
+{% endblock extra_js %}

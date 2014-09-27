@@ -1,0 +1,7 @@
+{% load bootstrap3 %}
+<form id="project_form" class="form-horizontal" action="{{ form_url }}" method="post" role="form">
+	{% csrf_token %}
+    {% bootstrap_form form %}
+    <input type="submit" value="Submit" />
+    <input type="hidden" name="next" value="/"/>
+</form>

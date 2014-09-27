@@ -19,6 +19,7 @@ from .forms import *
 from .models import Project, Developer, Stage, Task
 
 
+#-------------Project-----------------------------#
 class ProjectDeveloperList(ListView):
     template_name = "web/developer_by_project.html"
 
@@ -42,21 +43,16 @@ class ProjectList(ListView):
 
     def get_context_data(self, **kwargs):
         context = super(ProjectList, self).get_context_data(**kwargs)
-        form = CreateProjectForm()
+        stages = []
+        for project in self.queryset:
+            project_stages = Stage.objects.filter(project__id=project.id)
+            if project_stages:
+                for stage in project_stages:
+                    stages.append(stage)
+            print stages
+        form = ManageProjectForm()
         context['form'] = form
-        return context
-
-
-class TaskList(ListView):
-    model = Task
-    template_name = "web/task.html"
-    context_object_name = 'tasks'
-    queryset = Task.objects.all()
-
-    def get_context_data(self, **kwargs):
-        context = super(TaskList, self).get_context_data(**kwargs)
-        form = CreateTaskForm()
-        context['form'] = form
+        context['stages'] = stages
         return context
 
 
@@ -71,36 +67,131 @@ class ProjectDetail(DetailView):
         return context
 
 
-class DeveloperList(ListView):
-    template_name = "web/new_developer.html"
-    queryset = Developer.objects.order_by('-name')
-    context_object_name = 'developer_list'
-
-
 class CreateProject(CreateView):
-    template_name = '/'
-    form_class = CreateProjectForm
-    context_object_name = 'create_project'
+    model = Project
+    form_class = ManageProjectForm
+    context_object_name = 'project'
     success_url = '/'
+
+    def get_context_data(self, **kwargs):
+        context = super(CreateProject, self).get_context_data(**kwargs)
+        context['form_url'] = self.object.get_create_url()
+        return context
 
 
 class UpdateProject(UpdateView):
     model = Project
-    context_object_name = 'update_project'
+    form_class = ManageProjectForm
+    context_object_name = 'project'
+    success_url = '/'
+    template_name = 'web/manage_project.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(UpdateProject, self).get_context_data(**kwargs)
+        context['form_url'] = self.object.get_update_url()
+        return context
+
+
+class DeleteProject(DeleteView):
+    model = Project
     success_url = '/'
 
 
-class CreateStage(CreateView):
-    template_name = 'web/create_stage.html'
-    form_class = CreateStageForm
-    context_object_name = 'create_stage'
+#------------------Task---------------------3
+class TaskList(ListView):
+    model = Task
+    template_name = "web/task.html"
+    context_object_name = 'tasks'
+    queryset = Task.objects.all()
+
+    def get_context_data(self, **kwargs):
+        context = super(TaskList, self).get_context_data(**kwargs)
+        form = ManageStageForm()
+        context['form'] = form
+        return context
 
 
 class CreateTask(CreateView):
-    template_name = '/task.html'
-    form_class = CreateTaskForm
-    context_object_name = 'create_task'
+    model = Task
+    form_class = ManageTaskForm
+    context_object_name = 'task'
     success_url = '/task'
+
+    def get_context_data(self, **kwargs):
+        context = super(CreateTask, self).get_context_data(**kwargs)
+        context['form_url'] = self.object.get_create_url()
+        return context
+
+
+class UpdateTask(UpdateView):
+    model = Task
+    form_class = ManageTaskForm
+    context_object_name = 'task'
+    success_url = '/task'
+    template_name = 'web/manage_task.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(UpdateTask, self).get_context_data(**kwargs)
+        context['form_url'] = self.object.get_update_url()
+        return context
+
+
+class DeleteTask(DeleteView):
+    model = Task
+    success_url = '/task'
+
+
+#-----------------Stage--------------------#
+class StageList(ListView):
+    model = Stage
+    template_name = "web/stage.html"
+    context_object_name = 'stages'
+    queryset = Stage.objects.all()
+
+    def get_context_data(self, **kwargs):
+        context = super(StageList, self).get_context_data(**kwargs)
+        form = ManageStageForm()
+        context['form'] = form
+        return context
+
+
+class CreateStage(CreateView):
+    model = Stage
+    form_class = ManageStageForm
+    template_name = '/stage.html'
+    context_object_name = 'stage'
+    success_url = '/stage'
+
+    def get_context_data(self, **kwargs):
+        context = super(CreateStage, self).get_context_data(**kwargs)
+        context['form_url'] = self.object.get_create_url()
+        return context
+
+
+class UpdateStage(UpdateView):
+    model = Stage
+    form_class = ManageStageForm
+    context_object_name = 'stage'
+    success_url = '/stage'
+    template_name = 'web/manage_stage.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(UpdateStage, self).get_context_data(**kwargs)
+        context['form_url'] = self.object.get_update_url()
+        return context
+
+
+class DeleteStage(DeleteView):
+    model = Stage
+    success_url = '/stage'
+
+#----------Developer--------------------#
+
+
+class DeveloperList(ListView):
+    template_name = "web/new_developer.html"
+    queryset = Developer.objects.order_by('-name')
+    context_object_name = 'developer_list'
 
 
 class Registration(CreateView):
@@ -108,17 +199,17 @@ class Registration(CreateView):
     form_class = UserRegisterForm
     success_url = '/'
 
-    #def post(self, request, *args, **kwargs):
+    # def post(self, request, *args, **kwargs):
     #    reg_form = ClientRegisterForm(request.POST)
     #    if reg_form.is_valid():
     #        reg_form.save()
     #        return HttpResponseRedirect(self.success_url)
     #    else:
     #        return render_to_response('reserve/registration.html', {'form': reg_form},
-    #                                  context_instance=RequestContext(request))
+    # context_instance=RequestContext(request))
 
 
-############################Para autenticarse####################################
+############################Para autenticarse#############################
 def login(request):
     username = request.POST['username']
     password = request.POST['password']
@@ -138,4 +229,3 @@ def logout(request):
     auth.logout(request)
     # Redirect to a success page.
     return HttpResponseRedirect("/loggedout")
-
