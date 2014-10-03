@@ -15,7 +15,7 @@
                 <th>{% trans "Star Date" %}</th>
                 <th>{% trans "End Date" %}</th>
                 <th>{% trans "Project" %}</th>
-                <th></th>
+                <th style="width: 100px"></th>
             </tr>
         </thead>
         <tbody>
@@ -47,9 +47,10 @@
     {% block modal_create_stage %}
         <div class="modal fade" id="modalCreateStage" tabindex="-1" role="dialog" aria-labelledby="modalCreateStage" aria-hidden="true">
             <div class="modal-dialog">
-                <div div class="alert alert-info" role="alert">
-                    <div class="modal-header">
-                    <h4 class="modal-title" id="myModalLabel1">Create Stage</h4>
+                 <div class="modal-content">
+                    <div class="modal-header alert alert-info">
+                        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                            <h4 class="modal-title" id="myModalLabel2"> {% trans "Create Stage" %}</h4>
                     </div>
                     <div class="modal-body">
 
@@ -70,12 +71,13 @@
     {% block modal_update_stage %}
          <div class="modal fade" id="modalUpdateStage" tabindex="-1" role="dialog" aria-labelledby="modalUpdateStage" aria-hidden="true">
             <div class="modal-dialog">
-                <div class="alert alert-success" role="alert">
-                    <div class="modal-header">
-                    <h4 class="modal-title" id="myModalLabel2">{% trans "Update Stage" %}</h4>
+                 <div class="modal-content">
+                    <div class="modal-header alert alert-success">
+                        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                            <h4 class="modal-title" id="myModalLabel2"> {% trans "Update Stage" %}</h4>
                     </div>
                     <div class="modal-body">
-                       <div class="modal-footer">
+
                         <form id="update_stage_form" class="form-horizontal" action="" method="post" role="form">
                             {% csrf_token %}
                             {% bootstrap_form form %}
@@ -84,7 +86,7 @@
                                 <input type="submit" value="Submit" class="btn btn-sm btn-success" />
                              </div>
                          </form>
-                       </div>
+
                     </div>
 
                 </div>
@@ -92,7 +94,7 @@
          </div>
     {% endblock modal_update_stage%}
     {% block modal_delete_stage %}
-        <div class="modal fade" id="modalDeleteTask" tabindex="-1" role="dialog" aria-labelledby="modalDeleteStage" aria-hidden="true">
+        <div class="modal fade" id="modalDeleteStage" tabindex="-1" role="dialog" aria-labelledby="modalDeleteStage" aria-hidden="true">
             <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header alert alert-danger">

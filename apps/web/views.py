@@ -1,3 +1,5 @@
+import os
+
 from django.http import HttpResponseRedirect
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 
@@ -49,7 +51,7 @@ class ProjectList(ListView):
             if project_stages:
                 for stage in project_stages:
                     stages.append(stage)
-            print stages
+
         form = ManageProjectForm()
         context['form'] = form
         context['stages'] = stages
@@ -73,11 +75,31 @@ class CreateProject(CreateView):
     context_object_name = 'project'
     success_url = '/'
 
+    @method_decorator(login_required)
+    def dispatch(self, request, *args, **kwargs):
+        return super(CreateProject, self).dispatch(request, *args, **kwargs)
+
     def get_context_data(self, **kwargs):
         context = super(CreateProject, self).get_context_data(**kwargs)
         context['form_url'] = self.object.get_create_url()
         return context
 
+    def form_valid(self, form):
+        super(CreateProject, self).form_valid(form)
+
+        username = self.request.user.username
+        email = self.request.user.email#"nllanes@gmail.com"
+        print username
+        print email
+
+        filescrip = 'D:/Personal/Nueva carpeta/project_admin/apps/web/lib/DjangoBolt/django_bolt_script.py'
+        archive = os.path.basename(filescrip)
+        directorio = os.path.dirname(filescrip)
+        print archive
+        print directorio
+        #os.startfile(filescrip , username)
+        os.system(filescrip + ' ' + username + ' ' + email)
+        return HttpResponseRedirect('/')
 
 class UpdateProject(UpdateView):
     model = Project
@@ -210,22 +232,18 @@ class Registration(CreateView):
 
 
 ############################Para autenticarse#############################
-def login(request):
-    username = request.POST['username']
-    password = request.POST['password']
-    user = auth.authenticate(username=username, password=password)
-    if user is not None and user.is_active:
-        # Correct password, and the user is marked "active"
-        auth.login(request, user)
-        # Redirect to a success page.
-
-        return render_to_response('web/projects.html')
-    else:
-        # Show an error page
-        return HttpResponseRedirect("/registration")
+#def login(request):
+#    username = request.POST['username']
+#    password = request.POST['password']
+#    user = auth.authenticate(username=username, password=password)
+#    if user is not None and user.is_active:
+#        auth.login(request, user)
+#        return HttpResponseRedirect("/project")
+#    else:
+#        return HttpResponseRedirect("/registration")
 
 
-def logout(request):
-    auth.logout(request)
-    # Redirect to a success page.
-    return HttpResponseRedirect("/loggedout")
+#def logout(request):
+#    auth.logout(request)
+#    # Redirect to a success page.
+#    return HttpResponseRedirect("/loggedout")

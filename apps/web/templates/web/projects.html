@@ -15,7 +15,7 @@
                 <th>{% trans "Title" %}</th>
                 <th>{% trans "Description" %}</th>
                 <th>{% trans "Stage" %}</th>
-                <th style="width: 100px"></th>
+                <th></th>
             </tr>
         </thead>
         <tbody>
@@ -27,12 +27,15 @@
                         {{ project.project_stage.all.0.name }}
                     </td>
                     <td>
-                        <div class="btn-group">
+                        <div class="btn-group" style=":width: 118px">
                              <a href="javascript:" onclick="update_project(this)" class="btn btn-default sign-btn" data-toggle="modal" data-target="#modalUpdateProject" data-url="{% url 'update_project' project.id %}">
                                 <span class="glyphicon glyphicon-pencil"></span>
                             </a>
                             <a href="javascript:" onclick="delete_project_confirm(this)" class="btn btn-default" data-toggle="modal" data-target="#modalDeleteProject" data-url="{% url 'delete_project' project.id %}" data-name="{{project.title}}">
                                 <span class="glyphicon glyphicon-trash"></span>
+                            </a>
+                            <a href="javascript:" class="btn btn-default sign-btn" data-target="#modalDowloadProject"  >
+                                <span class="glyphicon glyphicon-download"></span>
                             </a>
                         </div>
                     </td>
@@ -48,9 +51,10 @@
     {% block modal_create_project %}
         <div class="modal fade" id="modalCreateProject" tabindex="-1"  role="dialog" aria-labelledby="modalCreateProject" aria-hidden="true">
             <div class="modal-dialog">
-                <div class="alert alert-info" role="alert">
-                    <div class="modal-header">
-                    <h4 class="modal-title" id="myModalLabel">Create Project</h4>
+                <div class="modal-content">
+                    <div class="modal-header alert alert-info">
+                        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                            <h4 class="modal-title" id="myModalLabel2"> {% trans "Update Project" %}</h4>
                     </div>
                     <div class="modal-body">
 
@@ -73,12 +77,13 @@
     {% block modal_update_project %}
         <div class="modal fade" id="modalUpdateProject" tabindex="-1" role="dialog" aria-labelledby="modalUpdateProject" aria-hidden="true">
             <div class="modal-dialog">
-                <div class="alert alert-success" role="alert">
-                    <div class="modal-header">
-                    <h4 class="modal-title" id="myModalLabel2">{% trans "Update Project" %}</h4>
+            <div class="modal-content" >
+                    <div class="modal-header alert alert-success">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                        <h4 class="modal-title" id="myModalLabel2"> {% trans "Update Project" %}</h4>
                     </div>
                     <div class="modal-body">
-                       <div class="modal-footer">
+
                         <form id="update_project_form" class="form-horizontal" action="" method="post" role="form">
                             {% csrf_token %}
                             {% bootstrap_form form %}
@@ -87,10 +92,10 @@
                                 <input type="submit" value="Submit" class="btn btn-sm btn-success" />
                              </div>
                          </form>
-                       </div>
+
                     </div>
 
-                </div>
+            </div>
             </div>
          </div>
     {% endblock modal_update_project%}
@@ -113,6 +118,25 @@
             </div>
          </div>
     {% endblock modal_delete_project%}
+    {% block modal_dowload_project %}
+        <div class="modal fade" id="modalDowloadProject" tabindex="-1" role="dialog" aria-labelledby="#modalDowloadProject" aria-hidden="true">
+            <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header alert alert-link">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                    <h4 class="modal-title" id="myModalLabel3">Bajarse</h4>
+                </div>
+                <div class="modal-body">
+                    <h4>{% trans "Bajarse proyecto  el proyecto" %}</h4>
+                </div>
+               <div class="modal-footer">
+                    <button id="delete_project_ok" type="button" class="btn btn-sm btn-danger">Yes</button>
+                    <button type="button" class="btn btn-sm btn-cancel" data-dismiss="modal">Close</button>
+               </div>
+            </div>
+            </div>
+         </div>
+    {% endblock modal_dowload_project%}
 {% endblock %}
 
 {% block extra_js %}

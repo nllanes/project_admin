@@ -1,23 +1,52 @@
-{% extends "base.html" %}
-{% load url from future %}
 
+{% load url from future %}
+{% load i18n %}
+{% load bootstrap3 %}
+{% load staticfiles%}
 
 {% block content %}
 
   {% if form.errors %}
     <p class="error">Sorry, that's not a valid username or password</p>
   {% endif %}
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="../../favicon.ico">
 
-  <form action='.' method='post'>{% csrf_token %}
-    <label for="username">User name:</label>
-    <input type="text" name="username" value="" id="username">
-    <label for="password">Password:</label>
-    <input type="password" name="password" value="" id="password">
+    <title>Login</title>
 
-    <input type="submit" value="login" />
-    <input type="hidden" name="next" value="/projects/"/>
-  <form action='.' method='post'>
-  </form>
-   </form>
+    <!-- Bootstrap core CSS -->
+    <link href="../../static/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="../../static/css/signin.css" rel="stylesheet">
+
+
+  </head>
+  <body>
+
+    <div class="container">
+
+      <form action="." class="form-signin" role="form" method='post' >{% csrf_token %}
+        <h2 class="form-signin-heading-heading">Please sign in</h2>
+        <input type="user" class="form-signin-control" name="username" value="" id="username" placeholder="User Name" required autofocus>
+        <input type="password" class="form-signin-control" name="password" value="" id="password" placeholder="Password" required>
+        <label class="checkbox">
+          <input type="checkbox" value="remember-me"> Remember me
+        </label>
+        <button class="btn btn-lg btn-primary btn-block" type="submit" value="login">Sign in</button>
+        <input type="hidden" name="next" value={{ next }}/>
+         <form action='.' method='post'>
+         </form>
+      </form>
+
+    </div>
+
+  </body>
 
 {% endblock %}
+

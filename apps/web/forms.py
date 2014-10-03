@@ -1,4 +1,5 @@
 from django import forms
+from django.contrib.admin import widgets
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 from apps.web.models import Developer, Project, Stage, Task
@@ -15,9 +16,13 @@ class ManageStageForm(forms.ModelForm):
 
 
 class ManageTaskForm(forms.ModelForm):
+
     class Meta:
         model = Task
-
+        widgets = {
+            'init_date': widgets.AdminSplitDateTime(),
+            'end_date': widgets.AdminSplitDateTime()
+        }
 
 
 class UserRegisterForm(UserCreationForm):

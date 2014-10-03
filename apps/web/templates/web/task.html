@@ -2,6 +2,7 @@
 
 {% load i18n %}
 {% load bootstrap3 %}
+{% load staticfiles %}
 
 {% block page_title %}
     {% trans "Taks" %}
@@ -19,7 +20,7 @@
                 <th>{% trans "Developers" %}</th>
                 <th>{% trans "Star Date" %}</th>
                 <th>{% trans "End Date" %}</th>
-                <th></th>
+                <th style="width: 100px"></th>
             </tr>
         </thead>
         <tbody>
@@ -55,9 +56,10 @@
     {% block modal_create_task %}
         <div class="modal fade" id="modalCreateTask" tabindex="-1" role="dialog" aria-labelledby="modalCreateTask" aria-hidden="true">
             <div class="modal-dialog">
-                <div div class="alert alert-info" role="alert">
-                    <div class="modal-header">
-                    <h4 class="modal-title" id="myModalLabel1">Create Task</h4>
+                 <div class="modal-content">
+                    <div class="modal-header alert alert-info">
+                        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                            <h4 class="modal-title" id="myModalLabel2"> {% trans "Create Task" %}</h4>
                     </div>
                     <div class="modal-body">
 
@@ -78,12 +80,13 @@
     {% block modal_update_task %}
         <div class="modal fade" id="modalUpdateTask" tabindex="-1" role="dialog" aria-labelledby="modalUpdateTask" aria-hidden="true">
             <div class="modal-dialog">
-                <div class="alert alert-success" role="alert">
-                    <div class="modal-header">
-                    <h4 class="modal-title" id="myModalLabel2">{% trans "Update Task" %}</h4>
+                <div class="modal-content" >
+                    <div class="modal-header alert alert-success">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                        <h4 class="modal-title" id="myModalLabel2"> {% trans "Update Task" %}</h4>
                     </div>
                     <div class="modal-body">
-                       <div class="modal-footer">
+
                         <form id="update_task_form" class="form-horizontal" action="" method="post" role="form">
                             {% csrf_token %}
                             {% bootstrap_form form %}
@@ -92,7 +95,7 @@
                                 <input type="submit" value="Submit" class="btn btn-sm btn-success" />
                              </div>
                          </form>
-                       </div>
+
                     </div>
 
                 </div>
@@ -120,7 +123,10 @@
     {% endblock modal_delete_task%}
 {% endblock %}
 {% block extra_js %}
+    <script type="text/javascript" src="{{MEDIA_URL}}/admin/js/core.js"></script>
+    <script type="text/javascript" src="{% static 'js/RelatedObjectLookups.js' %}"></script>
     <script>
+
         function update_task (sender) {
             $.get($(sender).data('url'), {}, function(response){
                 $('#update_task_form').replaceWith(response);
